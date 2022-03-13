@@ -307,6 +307,24 @@ function primaryNumberCheck(snake) {
   return isPrimaryNumber;
 }
 
+function playAudio(type) {
+  var soundFile = document.createElement("audio");
+  soundFile.preload = "auto";
+
+  //Load the sound file (using a source element for expandability)
+  var src = document.createElement("source");
+  if (type == "eat-apple") src.src = "./assets/eat-apple.mp3";
+  else if (type == "level-up") src.src = "./assets/level-up.mp3";
+  else src.src = "./assets/game-over.mp3";
+
+  soundFile.appendChild(src);
+
+  //Load the audio tag
+  //It auto plays as a fallback
+  soundFile.load();
+  soundFile.play();
+}
+
 function draw() {
   setInterval(function () {
     let snakeCanvas = document.getElementById("snakeBoard");
@@ -412,6 +430,7 @@ function eat(snake, apples, diamond) {
   for (let i = 0; i < apples.length; i++) {
     let apple = apples[i];
     if (x == apple.position.x && y == apple.position.y) {
+      playAudio("eat-apple"); // play audio eat
       snake.score++; //nambah score
 
       apple.position = initPosition();
@@ -420,6 +439,7 @@ function eat(snake, apples, diamond) {
 
       if (snake.score % 5 == 0) {
         level++;
+        playAudio("level-up");
 
         // Jika Level kurang dari 5
         if (level < 6) {
@@ -480,6 +500,7 @@ function eat(snake, apples, diamond) {
 
           // Jika nyawa kurang atau sama dengan 0, maka game over
           if (snake.lifes <= 0) {
+            playAudio("game-over"); // play audio eat
             setTimeout(function () {
               alert("Game Over!");
             }, 200);
