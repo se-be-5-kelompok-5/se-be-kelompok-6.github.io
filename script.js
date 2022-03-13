@@ -52,6 +52,9 @@ let apples = [
   {
     position: initPosition(),
   },
+  {
+    position: initPosition(),
+  },
 ];
 
 let lifeDiamond = {
