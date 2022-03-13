@@ -1,0 +1,61 @@
+<html>
+  <head> </head>
+  <script type="text/javascript" src="script.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <body onload="draw();">
+    <div class="body">
+      <div class="setting">
+        <div>
+          <div class="header">
+            <div id="Nyawa" class="Nyawa" alt="Nyawa"></div>
+            <div class="board">
+              <div class="scoreBoard">
+                <p>Score:</p>
+                <p id="TextScore" class="textScore"></p>
+              </div>
+              <div class="lifeBoard">
+                <p>Lifes:</p>
+                <p id="TextLifes" class="textLifes"></p>
+              </div>
+              <div class="levelBoard">
+                <p>Level:</p>
+                <p id="TextLevel" class="textLevel"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- kepala ular -->
+          <img
+            id="SnakeHead"
+            style="display: none"
+            src="./assets/kepala.png"
+            alt="Applee"
+          />
+          <!-- gambar diamond -->
+          <img
+            id="diamondd"
+            style="display: none"
+            width="20"
+            height="20"
+            src="./assets/diamond.png"
+            alt="dim"
+          />
+          <!-- gamber apple -->
+          <img
+            id="apple"
+            style="display: none"
+            width="40"
+            height="40"
+            src="./assets/apple.png"
+          />
+          <canvas
+            class="snakeBoard"
+            id="snakeBoard"
+            width="800"
+            height="600"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
