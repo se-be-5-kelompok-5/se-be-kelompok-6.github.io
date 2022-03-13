@@ -1,0 +1,85 @@
+.body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header {
+  background-color: #0d00a3;
+  border-color: white;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.Nyawa {
+  margin-left: 10px;
+  width: 40%;
+}
+.setting {
+  width: 800;
+  height: 600;
+  margin-top: -50px;
+}
+
+.snakeBoard {
+  margin: 0px;
+  padding: 0px;
+  /* padding-left: 200px; */
+  background-color: #97c9f8;
+}
+.setting .img {
+  width: 20px;
+  height: 20px;
+}
+body {
+  background-color: darkcyan;
+}
+
+.score1Board {
+  background-color: white;
+}
+.life1 {
+  background-color: white;
+}
+.level {
+  background-color: white;
+}
+
+.board {
+  margin-left: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scoreBoard,
+.levelBoard,
+.lifeBoard {
+  background-color: aliceblue;
+  margin: 10px 10px;
+  min-width: 50px;
+  display: flex;
+}
+
+.scoreBoard p,
+.levelBoard p,
+.lifeBoard p {
+  text-align: center;
+  padding: 0 10px;
+
+  font-size: 30px;
+  margin: 0;
+}
+
+.textScore {
+  color: #0d00a3;
+}
+.TextLifes {
+  color: #fa1d0e;
+}
+.TextLevel {
+  color: #ff136e;
+}
