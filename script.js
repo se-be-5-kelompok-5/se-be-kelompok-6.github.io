@@ -62,16 +62,28 @@ let lifeDiamond = {
   position: initPosition(),
 };
 
+function getWallPosition() {
+  let position;
+  // Untuk Dinding
+  if (level > 1) {
+    const findLevel = dinding.find(v => v.level == level);
+    if (findLevel && Array.isArray(findLevel.position)) {
+      position = findLevel.position;
+    }
+  }
+  return position;
+}
+
 function drawCell(ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 }
+
 //untuk score ular
 function drawScore(snake) {
   let textScore = document.getElementById("TextScore");
   textScore.textContent = snake.score;
 }
-
 //untuk nyawanya
 function drawlife(snake) {
   let textLifes = document.getElementById("TextLifes");
@@ -107,6 +119,21 @@ function drawNyawa() {
       nyawaImg.appendChild(getImage());
     }
   }, 200);
+}
+
+function primaryNumberCheck(snake) {
+  let isPrimaryNumber = true;
+  for (let i = 1; i <= snake.score; i++) {
+    // Jika i bukan angka 1 atau skor //
+    if ([1, snake.score].includes(i) == false) {
+      // Jika Score mod i adalah 0 //
+      if (snake.score % i == 0) {
+        isPrimaryNumber = false;
+        break;
+      }
+    }
+  }
+  return isPrimaryNumber;
 }
 
 function draw() {
@@ -150,6 +177,36 @@ function draw() {
     drawlife(snake1);
     drawLevel(snake1);
   }, REDRAW_INTERVAL);
+
+  setInterval(function () {
+    let snakeCanvas = document.getElementById("snakeBoard");
+    let ctx = snakeCanvas.getContext("2d");
+    //untuk diamond
+    let isPrimaryNumber = primaryNumberCheck(snake1);
+
+    // Jika Score adalah primary number dan di skor tersebut belum makan nyawa
+    if (isPrimaryNumber && isEatLifes == false) {
+      drawCell(
+        ctx,
+        lifeDiamond.position.x,
+        lifeDiamond.position.y,
+        lifeDiamond.color
+      );
+
+      var diamon = document.createElement("img");
+      diamon.src = "./assets/diamond.png";
+      diamon.height = "20";
+      diamon.width = "20";
+
+      ctx.drawImage(
+        diamon,
+        lifeDiamond.position.x * CELL_SIZE,
+        lifeDiamond.position.y * CELL_SIZE,
+        CELL_SIZE,
+        CELL_SIZE
+      );
+    }
+  }, 200);
 }
 
 function teleport(snake) {
@@ -167,7 +224,8 @@ function teleport(snake) {
   }
 }
 //this
-function eat(snake, apples) {
+function eat(snake, apples, diamond) {
+  let isEatApple = false;
   let x = snake.head.x;
   let y = snake.head.y;
 
@@ -176,12 +234,24 @@ function eat(snake, apples) {
     let apple = apples[i];
     if (x == apple.position.x && y == apple.position.y) {
       snake.score++; //nambah score
-
       apple.position = initPosition();
       snake.body.push({ x, y }); //badan panjang
-
-      // Untuk Level
+      isEatApple = true;
     }
+  }
+
+  // Snake and diamond
+  if (x == diamond.position.x && y == diamond.position.y) {
+    isEatLifes = true;
+    drawNyawa();
+    diamond.position = initPosition();
+    snake.lifes++; //nambah nyawa
+  }
+
+  // Jika Ular makan Apple, maka nyawa berganti posisi
+  else if (isEatApple) {
+    diamond.position = initPosition();
+    isEatLifes = false;
   }
 }
 
@@ -201,7 +271,7 @@ function move(snake) {
       break;
   }
   teleport(snake);
-  eat(snake, apples);
+  eat(snake, apples, lifeDiamond);
   moveBody(snake);
 
   setTimeout(function () {
