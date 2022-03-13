@@ -57,28 +57,23 @@ let apples = [
   },
 ];
 
+let diamonds = [
+  {
+    id: "dd",
+    color: "green",
+    position: initPosition(),
+  },
+];
+
 let lifeDiamond = {
   color: "white",
   position: initPosition(),
 };
 
-function getWallPosition() {
-  let position;
-  // Untuk Dinding
-  if (level > 1) {
-    const findLevel = dinding.find(v => v.level == level);
-    if (findLevel && Array.isArray(findLevel.position)) {
-      position = findLevel.position;
-    }
-  }
-  return position;
-}
-
 function drawCell(ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 }
-
 //untuk score ular
 function drawScore(snake) {
   let textScore = document.getElementById("TextScore");
@@ -172,6 +167,14 @@ function draw() {
       );
     }
 
+    // Untuk Dinding
+    let wallPosition = getWallPosition();
+    if (Array.isArray(wallPosition)) {
+      for (let i = 0; i < wallPosition.length; i++) {
+        drawCell(ctx, wallPosition[i].x, wallPosition[i].y, "grey");
+      }
+    }
+
     //munculin score sama nyawa
     drawScore(snake1);
     drawlife(snake1);
@@ -234,9 +237,41 @@ function eat(snake, apples, diamond) {
     let apple = apples[i];
     if (x == apple.position.x && y == apple.position.y) {
       snake.score++; //nambah score
+
       apple.position = initPosition();
       snake.body.push({ x, y }); //badan panjang
       isEatApple = true;
+
+      if (snake.score % 5 == 0) {
+        level++;
+
+        // Jika Level kurang dari 5
+        if (level < 6) {
+          setTimeout(function () {
+            alert(`Anda sekarang level ${level}`);
+          }, 100);
+          MOVE_INTERVAL -= 30;
+        } else {
+          // Jika Level lebih dari 5 (Permainan Selesai)
+          MOVE_INTERVAL = 200;
+          setTimeout(function () {
+            alert(`Permainan Selesai`);
+          }, 100);
+          let headAndBody = initHeadAndBody();
+          snake.head = headAndBody.head;
+          snake.body = headAndBody.body;
+          snake.lifes = 3;
+          snake.direction = initDirection();
+          snake.score = 0; //Balikan score 1
+          level = 1; //Balikan level 1
+          drawNyawa();
+        }
+
+        // Jeda dalam 1 detik untuk keluar allert
+      }
+      break;
+
+      // Untuk Level
     }
   }
 
