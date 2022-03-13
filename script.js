@@ -16,6 +16,170 @@ let MOVE_INTERVAL = 200;
 let level = 1;
 let isEatLifes = false;
 
+const dinding = [
+  {
+    level: 2,
+    position: [
+      {
+        x: 2,
+        y: 2,
+      },
+      {
+        x: 3,
+        y: 2,
+      },
+      {
+        x: 4,
+        y: 2,
+      },
+      {
+        x: 5,
+        y: 2,
+      },
+      {
+        x: 11,
+        y: 2,
+      },
+      {
+        x: 12,
+        y: 2,
+      },
+      {
+        x: 13,
+        y: 2,
+      },
+      {
+        x: 14,
+        y: 2,
+      },
+    ],
+  },
+  {
+    level: 3,
+    position: [
+      {
+        x: 2,
+        y: 2,
+      },
+      {
+        x: 2,
+        y: 3,
+      },
+      {
+        x: 2,
+        y: 4,
+      },
+      {
+        x: 2,
+        y: 5,
+      },
+      {
+        x: 3,
+        y: 2,
+      },
+      {
+        x: 3,
+        y: 2,
+      },
+      {
+        x: 5,
+        y: 2,
+      },
+      {
+        x: 4,
+        y: 2,
+      },
+    ],
+  },
+
+  {
+    level: 4,
+    position: [
+      {
+        x: 11,
+        y: 10,
+      },
+      {
+        x: 12,
+        y: 10,
+      },
+      {
+        x: 13,
+        y: 10,
+      },
+      {
+        x: 14,
+        y: 10,
+      },
+      {
+        x: 15,
+        y: 10,
+      },
+      {
+        x: 9,
+        y: 14,
+      },
+      {
+        x: 7,
+        y: 14,
+      },
+      {
+        x: 8,
+        y: 14,
+      },
+      {
+        x: 23,
+        y: 24,
+      },
+      {
+        x: 24,
+        y: 24,
+      },
+      {
+        x: 25,
+        y: 24,
+      },
+    ],
+  },
+  {
+    level: 5,
+    position: [
+      {
+        x: 18,
+        y: 13,
+      },
+      {
+        x: 18,
+        y: 12,
+      },
+      {
+        x: 18,
+        y: 14,
+      },
+      {
+        x: 17,
+        y: 17,
+      },
+      {
+        x: 16,
+        y: 17,
+      },
+      {
+        x: 15,
+        y: 17,
+      },
+      {
+        x: 5,
+        y: 2,
+      },
+      {
+        x: 4,
+        y: 2,
+      },
+    ],
+  },
+];
+
 function initPosition() {
   return {
     x: Math.floor(Math.random() * WIDTH),
@@ -69,6 +233,18 @@ let lifeDiamond = {
   color: "white",
   position: initPosition(),
 };
+
+function getWallPosition() {
+  let position;
+  // Untuk Dinding
+  if (level > 1) {
+    const findLevel = dinding.find(v => v.level == level);
+    if (findLevel && Array.isArray(findLevel.position)) {
+      position = findLevel.position;
+    }
+  }
+  return position;
+}
 
 function drawCell(ctx, x, y, color) {
   ctx.fillStyle = color;
@@ -287,6 +463,36 @@ function eat(snake, apples, diamond) {
   else if (isEatApple) {
     diamond.position = initPosition();
     isEatLifes = false;
+  }
+
+  // Snake And Wall
+  if (level > 1) {
+    let wallPosition = getWallPosition();
+    if (Array.isArray(wallPosition)) {
+      for (let i = 0; i < wallPosition.length; i++) {
+        let position = wallPosition[i];
+        if (x == position.x && y == position.y) {
+          snake.lifes--;
+          drawNyawa();
+          let headAndBody = initHeadAndBody();
+          snake.head = headAndBody.head;
+          snake.body = headAndBody.body;
+
+          // Jika nyawa kurang atau sama dengan 0, maka game over
+          if (snake.lifes <= 0) {
+            setTimeout(function () {
+              alert("Game Over!");
+            }, 200);
+            snake.lifes = 3;
+            snake.direction = initDirection();
+            snake.score = 0; //Balikan score 1
+            level = 1; //Balikan level 1
+            MOVE_INTERVAL = 200; //Balikan kecepatan awal
+          }
+          break;
+        }
+      }
+    }
   }
 }
 
